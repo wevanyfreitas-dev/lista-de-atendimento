@@ -1,0 +1,37 @@
+# Project: ProjetoFila
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = main.o node.o atendimento.o fila.o
+LINKOBJ  = main.o node.o atendimento.o fila.o
+LIBS     = -L"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib" -L"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = ProjetoFila.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+node.o: node.c
+	$(CC) -c node.c -o node.o $(CFLAGS)
+
+atendimento.o: atendimento.c
+	$(CC) -c atendimento.c -o atendimento.o $(CFLAGS)
+
+fila.o: fila.c
+	$(CC) -c fila.c -o fila.o $(CFLAGS)
