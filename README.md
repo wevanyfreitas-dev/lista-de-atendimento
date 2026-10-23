@@ -5,6 +5,7 @@ Este projeto consiste no desenvolvimento de um Simulador de Fila de Atendimento 
 1. Wévany de Andrade Freitas
 2. Luciano Gomes dos Santos
 3. Alexandre David de Souza Silva
+4. Sauan Paranhos Sousa
 
 **Instruções de Compilação e Execução**: O comando exato do gcc ou make testado no terminal.
 
