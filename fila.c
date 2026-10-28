@@ -10,7 +10,7 @@ int remover(Fila_P *f, Atendimento *removido) {
 	
 };
 
-int inserir(Fila_P *f, Atendimento a){
+int inserir(Fila_P *f, Atendimento *a){
 	
 };
 

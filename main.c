@@ -4,7 +4,7 @@
 #include "interface.h"
 #include "atendimento.c"
 
-<<<<<<< Updated upstream
+
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
 	
@@ -22,12 +22,12 @@ int main(void){
 		printf("\tMENU DE ATENDIMENTO\n");
 		printf("\t=======================================\n");
 		printf("1 - Inserir Atendimento.\n");
-		printf("2 - Próximo Atendimento.\n");
+		printf("2 - Proximo Atendimento.\n");
 		printf("3 - Exibir fila.\n");
 		printf("4 - Tamanho da fila.\n");
-		printf("5 - Verificar se está vazia.\n");
+		printf("5 - Verificar se esta� vazia.\n");
 		printf("0 - Sair.\n");
-		printf("Escolha a Opção: ");
+		printf("Escolha a Op�ao: ");
 		scanf("%d", &opcao);
 		
 			switch (opcao){
@@ -39,7 +39,7 @@ int main(void){
 					printf("\nNome: ");
 					scanf(" %[^\n]", atend.nome);
 					
-					printf("1- Alta\n2- Média\n3- Baixa.");
+					printf("1- Alta\n2- Media\n3- Baixa.");
 					printf("Prioridade: ");
 					scanf("%d", &atend.prioridade);
 					
@@ -52,7 +52,7 @@ int main(void){
 					
 				case 2:
 					if (remover(fila, &atend)){
-						printf("\n Próximo atendimento a ser chamado:\n");
+						printf("\n Proximo atendimento a ser chamado:\n");
 						printf("ID: %d\nNome: %s\nPrioridade: %d\n", atend.id, atend.nome, atend.prioridade);
 					}
 					else{
@@ -70,13 +70,12 @@ int main(void){
 				
 				case 5:
 					if (vazia(fila)){
-						printf("A fila está Vazia.\n");
+						printf("A fila esta� Vazia.\n");
 					} else{
 						printf("A fila possui pacientes.\n");
 					}
 					break;
-=======
->>>>>>> Stashed changes
+
 
                 case 0:
                 	destruir(fila);
@@ -84,7 +83,7 @@ int main(void){
                 	break;
                 	
                 default:
-                	printf("ERRO: DIGITE UMA OPÇÃO VÁLIDA.");
+                	printf("ERRO: DIGITE UMA OPCAO VALIDA.");
 			}
 	}
 return 0;
