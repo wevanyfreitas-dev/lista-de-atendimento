@@ -4,11 +4,11 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o node.o atendimento.o fila.o
-LINKOBJ  = main.o node.o atendimento.o fila.o
-LIBS     = -L"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib" -L"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
-INCS     = -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
-CXXINCS  = -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Users/Wévany Freitas/Documents/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+OBJ      = main.o atendimento.o fila.o node.o
+LINKOBJ  = main.o atendimento.o fila.o node.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
 BIN      = ProjetoFila.exe
 CXXFLAGS = $(CXXINCS) 
 CFLAGS   = $(INCS) 
@@ -27,11 +27,11 @@ $(BIN): $(OBJ)
 main.o: main.c
 	$(CC) -c main.c -o main.o $(CFLAGS)
 
-node.o: node.c
-	$(CC) -c node.c -o node.o $(CFLAGS)
-
 atendimento.o: atendimento.c
 	$(CC) -c atendimento.c -o atendimento.o $(CFLAGS)
 
 fila.o: fila.c
 	$(CC) -c fila.c -o fila.o $(CFLAGS)
+
+node.o: node.c
+	$(CC) -c node.c -o node.o $(CFLAGS)
