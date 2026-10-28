@@ -13,4 +13,4 @@ int tamanho(const Fila_P *f);
 void exibir(const Fila_P *f);
 Node *criar_node(Atendimento dado);
 void destruir_node(Node *n);
-int id(int a, int b);
+
