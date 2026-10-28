@@ -43,7 +43,7 @@ int main(void){
 					printf("Prioridade: ");
 					scanf("%d", &atend.prioridade);
 					
-					if(inserir(fila, atend)){
+					if(inserir(fila, &atend)){
 						printf("O atendimento foi inserido com sucesso.");
 					} else {
 						printf("Erro ao abrir atendimento...");

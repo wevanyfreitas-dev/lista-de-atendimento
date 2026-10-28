@@ -2,6 +2,18 @@
 #include <stdlib.h>
 #include "interface.h"
 
+struct fila_p {
+	Node *inicio;
+	int tam;
+};
+
+Fila_P* criar(void){
+	Fila_P *f = malloc(sizeof(Fila_P));
+	if (f == NULL) return NULL;
+	f->inicio = NULL;
+	f->tam = 0;
+	return f;
+}
 void destruir(Fila_P *f){
 	
 };
