@@ -51,7 +51,11 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
+<<<<<<< Updated upstream
 FileName=fila.c
+=======
+FileName=main.c
+>>>>>>> Stashed changes
 CompileCpp=0
 Folder=
 Compile=1
@@ -71,7 +75,11 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
+<<<<<<< Updated upstream
 FileName=interface.h
+=======
+FileName=fila.c
+>>>>>>> Stashed changes
 CompileCpp=0
 Folder=
 Compile=1
@@ -81,7 +89,11 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
+<<<<<<< Updated upstream
 FileName=main.c
+=======
+FileName=interface.h
+>>>>>>> Stashed changes
 CompileCpp=0
 Folder=
 Compile=1

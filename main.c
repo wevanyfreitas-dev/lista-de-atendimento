@@ -4,6 +4,7 @@
 #include "interface.h"
 #include "atendimento.c"
 
+<<<<<<< Updated upstream
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
 	
@@ -74,6 +75,8 @@ int main(void){
 						printf("A fila possui pacientes.\n");
 					}
 					break;
+=======
+>>>>>>> Stashed changes
 
                 case 0:
                 	destruir(fila);
