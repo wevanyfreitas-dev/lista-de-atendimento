@@ -6,7 +6,7 @@
 typedef struct {
     int id;                 
     char nome[50];
-    int prioridade; 
+    int prioridade;
     int ordem_chegada;
     int contador_espera;
 } Atendimento;
