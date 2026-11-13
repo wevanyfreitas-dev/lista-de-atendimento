@@ -2,7 +2,7 @@
 
 
 typedef struct node Node;
-No* node_criar(Atendimento a);
+No* node_criar(Atendimento *a);
 void node_destruir(No *no);
 
 void atendimento_exibir(Atendimento a);
