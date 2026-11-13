@@ -1,94 +1,57 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "interface.h"
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
-int persistencia_salvar_fila(const FilaPrioridade *f, const char *nome_arquivo) {
-    if (f == NULL || nome_arquivo == NULL) return 0;
 
-    FILE *fp = fopen(nome_arquivo, "w");
-    if (fp == NULL) return 0;
+//1. MÓDULO ATENDIMENTO
+typedef struct {
+    int id;
+    char nome[50];
+    int prioridade;
+    int ordem_chegada;
+    int contador_espera;
+} Atendimento;
 
-    int total = fila_tamanho(f);
-    int i;
-    for (i = 0; i < total; i++) {
-        Atendimento a;
-        if (fila_obter_elemento(f, i, &a)) {
-            fprintf(fp, "%d;%s;%d;%d;%d\n",
-                    a.id, a.nome, a.prioridade, a.ordem_chegada, a.contador_espera);
-        }
-    }
+void atendimento_exibir(Atendimento a);
 
-    fclose(fp);
-    return 1;
-}
 
-int persistencia_carregar_fila(FilaPrioridade *f, const char *nome_arquivo) {
-    if (f == NULL || nome_arquivo == NULL) return 0;
+// 2. MÓDULO NÓ
+typedef struct no No;
 
-    FILE *fp = fopen(nome_arquivo, "r");
-    if (fp == NULL) return 1;
+struct no {
+    Atendimento dado;
+    struct no *proximo;
+};
 
-    Atendimento a;
-    while (fscanf(fp, "%d;%49[^;];%d;%d;%d\n",
-                  &a.id, a.nome, &a.prioridade, &a.ordem_chegada, &a.contador_espera) == 5) {
-        fila_inserir(f, a);
-    }
+No* node_criar(Atendimento a);
+void node_destruir(No *no);
 
-    fclose(fp);
-    return 1;
-}
+// 3. MÓDULO FILA
+typedef struct fila_prioridade FilaPrioridade;
 
-int persistencia_salvar_historico(Atendimento *historico, int qtd, const char *nome_arquivo) {
-    if (nome_arquivo == NULL) return 0;
+FilaPrioridade* fila_criar(void);
+void fila_destruir(FilaPrioridade *f);
+int fila_inserir(FilaPrioridade *f, Atendimento a);
+int fila_chamar_proximo(FilaPrioridade *f, Atendimento *atendido);
+int fila_cancelar(FilaPrioridade *f, int id);
+int fila_vazia(const FilaPrioridade *f);
+int fila_tamanho(const FilaPrioridade *f);
+void fila_exibir(const FilaPrioridade *f);
+int fila_aplicar_antistarvation(FilaPrioridade *f, int limite_espera);
+int fila_obter_elemento(const FilaPrioridade *f, int indice, Atendimento *saida);
 
-    FILE *fp = fopen(nome_arquivo, "w");
-    if (fp == NULL) return 0;
-	
-	int i;
-    for (i = 0; i < qtd; i++) {
-        fprintf(fp, "%d;%s;%d;%d;%d\n",
-                historico[i].id, historico[i].nome, historico[i].prioridade,
-                historico[i].ordem_chegada, historico[i].contador_espera);
-    }
 
-    fclose(fp);
-    return 1;
-}
+// 4. MÓDULO PERSISTÊNCIA
+int persistencia_salvar_fila(const FilaPrioridade *f, const char *nome_arquivo);
+int persistencia_carregar_fila(FilaPrioridade *f, const char *nome_arquivo);
+int persistencia_salvar_historico(Atendimento *historico, int qtd, const char *nome_arquivo);
+int persistencia_carregar_historico(Atendimento **historico, int *qtd, const char *nome_arquivo);
 
-int persistencia_carregar_historico(Atendimento **historico, int *qtd, const char *nome_arquivo) {
-    if (historico == NULL || qtd == NULL || nome_arquivo == NULL) return 0;
 
-    FILE *fp = fopen(nome_arquivo, "r");
-    if (fp == NULL) {
-        *historico = NULL;
-        *qtd = 0;
-        return 1;
-    }
+// 5. MÓDULO INTERFACE
+void exibir_menu(void);
+int ler_opcao(void);
+void limpar_buffer(void);
+Atendimento ler_dados_atendimento(int *seq_id, int *seq_ordem);
+void exibir_historico_e_estatisticas(Atendimento *historico, int qtd);
 
-    int capacidade = 10;
-    *qtd = 0;
-    historico = (Atendimento) malloc(capacidade * sizeof(Atendimento));
-    if (*historico == NULL) {
-        fclose(fp);
-        return 0;
-    }
-
-    Atendimento a;
-    while (fscanf(fp, "%d;%49[^;];%d;%d;%d\n",
-                  &a.id, a.nome, &a.prioridade, &a.ordem_chegada, &a.contador_espera) == 5) {
-        if (*qtd >= capacidade) {
-            capacidade *= 2;
-            Atendimento temp = (Atendimento) realloc(*historico, capacidade * sizeof(Atendimento));
-            if (temp == NULL) {
-                fclose(fp);
-                return 0;
-            }
-            *historico = temp;
-        }
-        (*historico)[*qtd] = a;
-        (*qtd)++;
-    }
-
-    fclose(fp);
-    return 1;
-}
+#endif // INTERFACE_H
