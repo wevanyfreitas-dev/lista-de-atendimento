@@ -1,21 +1,69 @@
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
+/* ========================================== */
+/* 1. MÓDULO ATENDIMENTO                      */
+/* ========================================== */
 
-
-typedef struct node Node;
-No* node_criar(Atendimento *a);
-void node_destruir(No *no);
+typedef struct {
+    int id;                 // Identificador único
+    char nome[50];          // Nome da pessoa (Ajustado para vetor de char)
+    int prioridade;         // 1 = Normal, 2 = Prioritário, 3 = Urgente
+    int ordem_chegada;      // Contador sequencial para desempate FIFO
+    int contador_espera;    // Quantidade de atendimentos que passaram à frente (Anti-Starvation)
+} Atendimento;
 
 void atendimento_exibir(Atendimento a);
-typedef struct atendimento Atendimento;
 
-typedef struct fila_p Fila_P;
-Fila_P* criar(void);
-void destruir(Fila_P *f);
-int inserir(Fila_P *f, Atendimento a);
-int chamar_proximo(Fila_P *f, Atendimento *atendido);
-int cancelar(Fila_P *f, int id);
-int vazia(const Fila_P *f);
-int tamanho(const Fila_P *f);
-void exibir(const Fila_P *f);
+/* ========================================== */
+/* 2. MÓDULO NÓ                               */
+/* ========================================== */
 
-int fila_obter_elemento(const Fila_P *f, int indice, Atendimento *saida);
+typedef struct no No;
+
+struct no {
+    Atendimento dado;
+    struct no *proximo;
+};
+
+No* node_criar(Atendimento a);
+void node_destruir(No *no);
+
+/* ========================================== */
+/* 3. MÓDULO FILA (TAD Opaco)                 */
+/* ========================================== */
+
+// Declaração do Tipo Opaco
+typedef struct fila_prioridade FilaPrioridade;
+
+FilaPrioridade* fila_criar(void);
+void fila_destruir(FilaPrioridade *f);
+int fila_inserir(FilaPrioridade *f, Atendimento a);
+int fila_chamar_proximo(FilaPrioridade *f, Atendimento *atendido);
+int fila_cancelar(FilaPrioridade *f, int id);
+int fila_vazia(const FilaPrioridade *f);
+int fila_tamanho(const FilaPrioridade *f);
+void fila_exibir(const FilaPrioridade *f);
+int fila_aplicar_antistarvation(FilaPrioridade *f, int limite_espera);
+int fila_obter_elemento(const FilaPrioridade *f, int indice, Atendimento *saida);
+
+/* ========================================== */
+/* 4. MÓDULO PERSISTÊNCIA                     */
+/* ========================================== */
+
+int persistencia_salvar_fila(const FilaPrioridade *f, const char *nome_arquivo);
+int persistencia_carregar_fila(FilaPrioridade *f, const char *nome_arquivo);
+int persistencia_salvar_historico(Atendimento *historico, int qtd, const char *nome_arquivo);
+int persistencia_carregar_historico(Atendimento **historico, int *qtd, const char *nome_arquivo);
+
+/* ========================================== */
+/* 5. MÓDULO INTERFACE                        */
+/* ========================================== */
+
+void exibir_menu(void);
+int ler_opcao(void);
+void limpar_buffer(void);
+Atendimento ler_dados_atendimento(int *seq_id, int *seq_ordem);
+void exibir_historico_e_estatisticas(Atendimento *historico, int qtd);
+
+#endif /* INTERFACE_H */
