@@ -1,24 +1,20 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-/* ========================================== */
-/* 1. MÓDULO ATENDIMENTO                      */
-/* ========================================== */
 
+//1. MÃ“DULO ATENDIMENTO
 typedef struct {
-    int id;                 // Identificador único
-    char nome[50];          // Nome da pessoa (Ajustado para vetor de char)
-    int prioridade;         // 1 = Normal, 2 = Prioritário, 3 = Urgente
-    int ordem_chegada;      // Contador sequencial para desempate FIFO
-    int contador_espera;    // Quantidade de atendimentos que passaram à frente (Anti-Starvation)
+    int id;
+    char nome[50];
+    int prioridade;
+    int ordem_chegada;
+    int contador_espera;
 } Atendimento;
 
 void atendimento_exibir(Atendimento a);
 
-/* ========================================== */
-/* 2. MÓDULO NÓ                               */
-/* ========================================== */
 
+// 2. MÃ“DULO NÃ“
 typedef struct no No;
 
 struct no {
@@ -29,11 +25,7 @@ struct no {
 No* node_criar(Atendimento a);
 void node_destruir(No *no);
 
-/* ========================================== */
-/* 3. MÓDULO FILA (TAD Opaco)                 */
-/* ========================================== */
-
-// Declaração do Tipo Opaco
+// 3. MÃ“DULO FILA
 typedef struct fila_prioridade FilaPrioridade;
 
 FilaPrioridade* fila_criar(void);
@@ -47,23 +39,19 @@ void fila_exibir(const FilaPrioridade *f);
 int fila_aplicar_antistarvation(FilaPrioridade *f, int limite_espera);
 int fila_obter_elemento(const FilaPrioridade *f, int indice, Atendimento *saida);
 
-/* ========================================== */
-/* 4. MÓDULO PERSISTÊNCIA                     */
-/* ========================================== */
 
+// 4. MÃ“DULO PERSISTÃŠNCIA
 int persistencia_salvar_fila(const FilaPrioridade *f, const char *nome_arquivo);
 int persistencia_carregar_fila(FilaPrioridade *f, const char *nome_arquivo);
 int persistencia_salvar_historico(Atendimento *historico, int qtd, const char *nome_arquivo);
 int persistencia_carregar_historico(Atendimento **historico, int *qtd, const char *nome_arquivo);
 
-/* ========================================== */
-/* 5. MÓDULO INTERFACE                        */
-/* ========================================== */
 
+// 5. MÃ“DULO INTERFACE
 void exibir_menu(void);
 int ler_opcao(void);
 void limpar_buffer(void);
 Atendimento ler_dados_atendimento(int *seq_id, int *seq_ordem);
 void exibir_historico_e_estatisticas(Atendimento *historico, int qtd);
 
-#endif /* INTERFACE_H */
+#endif // INTERFACE_H
