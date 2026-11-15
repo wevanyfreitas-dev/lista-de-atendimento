@@ -1,0 +1,3 @@
+103;Alexandre;3;3;0
+101;Luciano Gomes;2;1;0
+102;Wevany Freitas;2;2;0

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "interface.h"
+#include "fila.h"
+#include "node.h"
 
 struct fila_prioridade {
     No *inicio;
@@ -9,6 +10,8 @@ struct fila_prioridade {
 
 FilaPrioridade* fila_criar(void) {
     FilaPrioridade f = (FilaPrioridade) malloc(sizeof(FilaPrioridade));
+    FilaPrioridade *f = (FilaPrioridade*) malloc(sizeof(FilaPrioridade));
+
     if (f == NULL) return NULL;
     f->inicio = NULL;
     f->quantidade = 0;
@@ -17,7 +20,6 @@ FilaPrioridade* fila_criar(void) {
 
 void fila_destruir(FilaPrioridade *f) {
     if (f == NULL) return;
-
     No *atual = f->inicio;
     while (atual != NULL) {
         No *temp = atual->proximo;
@@ -79,15 +81,77 @@ int fila_cancelar(FilaPrioridade *f, int id) {
     while (atual != NULL && atual->dado.id != id) {
         anterior = atual;
         atual = atual->proximo;
+
+    No *atual = f->inicio;
+    while (atual != NULL) {
+        No *temp = node_get_proximo(atual);
+        node_destruir(atual);
+        atual = temp;
+    }
+    free(f);
+}
+
+int fila_inserir(FilaPrioridade *f, Atendimento *a) {
+    if (f == NULL || a == NULL) return 0;
+    No *novo = node_criar(a);
+    if (novo == NULL) return 0;
+
+    int prio_nova = atendimento_get_prioridade(a);
+
+    if (f->inicio == NULL || prio_nova > atendimento_get_prioridade(node_get_dado(f->inicio))) {
+        node_set_proximo(novo, f->inicio);
+        f->inicio = novo;
+    } else {
+        No *atual = f->inicio;
+        while (node_get_proximo(atual) != NULL &&
+               atendimento_get_prioridade(node_get_dado(node_get_proximo(atual))) >= prio_nova) {
+            atual = node_get_proximo(atual);
+        }
+        node_set_proximo(novo, node_get_proximo(atual));
+        node_set_proximo(atual, novo);
+    }
+    f->quantidade++;
+    return 1;
+}
+
+Atendimento* fila_chamar_proximo(FilaPrioridade *f) {
+    if (fila_vazia(f)) return NULL;
+    No* removido = f->inicio;
+    f->inicio = node_get_proximo(removido);
+
+    Atendimento* atendido = node_liberar_dado(removido);
+    free(removido);
+    f->quantidade--;
+
+    No *aux = f->inicio;
+    while (aux != NULL) {
+        atendimento_incrementar_espera(node_get_dado(aux));
+        aux = node_get_proximo(aux);
+    }
+    return atendido;
+}
+
+int fila_cancelar(FilaPrioridade *f, int id) {
+    if (fila_vazia(f)) return 0;
+    No *atual = f->inicio;
+    No *anterior = NULL;
+
+    while (atual != NULL && atendimento_get_id(node_get_dado(atual)) != id) {
+        anterior = atual;
+        atual = node_get_proximo(atual);
     }
 
     if (atual == NULL) return 0;
+
 
     if (anterior == NULL) {
         f->inicio = atual->proximo;
     } else {
         anterior->proximo = atual->proximo;
     }
+
+    if (anterior == NULL) f->inicio = node_get_proximo(atual);
+    else node_set_proximo(anterior, node_get_proximo(atual));
 
     node_destruir(atual);
     f->quantidade--;
