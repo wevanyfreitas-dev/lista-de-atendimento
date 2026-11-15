@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "persistencia.h"
-#include "atendimento.h" // Precisa conhecer a interface do Atendimento
+#include "atendimento.h"
 
 int persistencia_salvar_fila(const FilaPrioridade *f, const char *nome_arquivo) {
     if (f == NULL || nome_arquivo == NULL) return 0;
@@ -42,7 +42,6 @@ int persistencia_carregar_fila(FilaPrioridade *f, const char *nome_arquivo) {
     while (fscanf(fp, "%d;%49[^;];%d;%d;%d\n", &id, nome, &prioridade, &ordem, &espera) == 5) {
         Atendimento* novo_atendimento = atendimento_criar(id, nome, prioridade, ordem);
         if (novo_atendimento != NULL) {
-            // CORREÇÃO: Reseta e ajusta o contador de espera com o valor salvo
             int i;
             for(i = 0; i < espera; i++) {
                 atendimento_incrementar_espera(novo_atendimento);
