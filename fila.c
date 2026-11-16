@@ -9,9 +9,7 @@ struct fila_prioridade {
 };
 
 FilaPrioridade* fila_criar(void) {
-    FilaPrioridade f = (FilaPrioridade) malloc(sizeof(FilaPrioridade));
     FilaPrioridade *f = (FilaPrioridade*) malloc(sizeof(FilaPrioridade));
-
     if (f == NULL) return NULL;
     f->inicio = NULL;
     f->quantidade = 0;
@@ -20,68 +18,6 @@ FilaPrioridade* fila_criar(void) {
 
 void fila_destruir(FilaPrioridade *f) {
     if (f == NULL) return;
-    No *atual = f->inicio;
-    while (atual != NULL) {
-        No *temp = atual->proximo;
-        node_destruir(atual);
-        atual = temp;
-    }
-    free(f);
-}
-
-int fila_inserir(FilaPrioridade *f, Atendimento a) {
-    if (f == NULL) return 0;
-
-    No *novo = node_criar(a);
-    if (novo == NULL) return 0;
-
-    if (f->inicio == NULL || a.prioridade > f->inicio->dado.prioridade) {
-        novo->proximo = f->inicio;
-        f->inicio = novo;
-    } else {
-        No *atual = f->inicio;
-        while (atual->proximo != NULL && atual->proximo->dado.prioridade >= a.prioridade) {
-            atual = atual->proximo;
-        }
-        novo->proximo = atual->proximo;
-        atual->proximo = novo;
-    }
-
-    f->quantidade++;
-    return 1;
-}
-
-int fila_chamar_proximo(FilaPrioridade *f, Atendimento *atendido) {
-    if (f == NULL || f->inicio == NULL) return 0;
-
-    No *removido = f->inicio;
-    if (atendido != NULL) {
-        *atendido = removido->dado;
-    }
-
-    f->inicio = removido->proximo;
-    node_destruir(removido);
-    f->quantidade--;
-
-    No *aux = f->inicio;
-    while (aux != NULL) {
-        aux->dado.contador_espera++;
-        aux = aux->proximo;
-    }
-
-    return 1;
-}
-
-int fila_cancelar(FilaPrioridade *f, int id) {
-    if (f == NULL || f->inicio == NULL) return 0;
-
-    No *atual = f->inicio;
-    No *anterior = NULL;
-
-    while (atual != NULL && atual->dado.id != id) {
-        anterior = atual;
-        atual = atual->proximo;
-
     No *atual = f->inicio;
     while (atual != NULL) {
         No *temp = node_get_proximo(atual);
@@ -143,13 +79,6 @@ int fila_cancelar(FilaPrioridade *f, int id) {
 
     if (atual == NULL) return 0;
 
-
-    if (anterior == NULL) {
-        f->inicio = atual->proximo;
-    } else {
-        anterior->proximo = atual->proximo;
-    }
-
     if (anterior == NULL) f->inicio = node_get_proximo(atual);
     else node_set_proximo(anterior, node_get_proximo(atual));
 
@@ -158,75 +87,67 @@ int fila_cancelar(FilaPrioridade *f, int id) {
     return 1;
 }
 
-int fila_vazia(const FilaPrioridade *f) {
-    return (f == NULL || f->inicio == NULL);
+int fila_vazia(const FilaPrioridade *f) { 
+    return (f == NULL || f->inicio == NULL); 
 }
 
-int fila_tamanho(const FilaPrioridade *f) {
-    return (f != NULL) ? f->quantidade : 0;
+int fila_tamanho(const FilaPrioridade *f) { 
+    return (f != NULL) ? f->quantidade : 0; 
 }
 
 void fila_exibir(const FilaPrioridade *f) {
-    if (f == NULL || f->inicio == NULL) {
+    if (fila_vazia(f)) {
         printf("\n[STATUS] A fila de espera esta vazia.\n");
         return;
     }
-
     printf("\n================ FILA DE ESPERA (%d PESSOAS) ================\n", f->quantidade);
     No *atual = f->inicio;
     int pos = 1;
     while (atual != NULL) {
         printf("%2d. ", pos++);
-        atendimento_exibir(atual->dado);
-        atual = atual->proximo;
+        atendimento_exibir(node_get_dado(atual));
+        atual = node_get_proximo(atual);
     }
     printf("===========================================================\n");
 }
 
 int fila_aplicar_antistarvation(FilaPrioridade *f, int limite_espera) {
-    if (f == NULL || f->inicio == NULL) return 0;
-
+    if (fila_vazia(f)) return 0;
     int promovidos = 0;
     No *atual = f->inicio;
 
     while (atual != NULL) {
-        if (atual->dado.contador_espera >= limite_espera && atual->dado.prioridade < 3) {
-            atual->dado.prioridade++;
-            atual->dado.contador_espera = 0;
+        Atendimento* a = node_get_dado(atual);
+        if (atendimento_get_contador_espera(a) >= limite_espera && atendimento_get_prioridade(a) < 3) {
+            atendimento_promover_prioridade(a);
+            atendimento_resetar_espera(a);
             promovidos++;
         }
-        atual = atual->proximo;
+        atual = node_get_proximo(atual);
     }
 
     if (promovidos > 0) {
-        No *antiga_lista = f->inicio;
+        No *lista_antiga = f->inicio;
         f->inicio = NULL;
         f->quantidade = 0;
 
-        while (antiga_lista != NULL) {
-            No *proximo_no = antiga_lista->proximo;
-            fila_inserir(f, antiga_lista->dado);
-            node_destruir(antiga_lista);
-            antiga_lista = proximo_no;
+        while (lista_antiga != NULL) {
+            No *proximo_no = node_get_proximo(lista_antiga);
+            Atendimento* a = node_liberar_dado(lista_antiga);
+            free(lista_antiga);
+            fila_inserir(f, a);
+            lista_antiga = proximo_no;
         }
     }
-
     return promovidos;
 }
 
-int fila_obter_elemento(const FilaPrioridade *f, int indice, Atendimento *saida) {
-    if (f == NULL || saida == NULL || indice < 0 || indice >= f->quantidade) return 0;
-
+Atendimento* fila_obter_elemento(const FilaPrioridade *f, int indice) {
+    if (f == NULL || indice < 0 || indice >= f->quantidade) return NULL;
     No *atual = f->inicio;
-    int i = 0;
-    while (atual != NULL && i < indice) {
-        atual = atual->proximo;
-        i++;
+    int i;
+    for (i = 0; i < indice && atual != NULL; i++) {
+        atual = node_get_proximo(atual);
     }
-
-    if (atual != NULL) {
-        *saida = atual->dado;
-        return 1;
-    }
-    return 0;
+    return (atual != NULL) ? node_get_dado(atual) : NULL;
 }
