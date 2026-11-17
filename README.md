@@ -21,7 +21,7 @@ O projeto foi desenvolvido em Linguagem C com execução em modo texto (terminal
 * *fila.h / fila.c: Define o ponteiro incompleto *FilaPrioridade* e esconde os membros concretos da estrutura (struct fila_prioridade*). Implementa a inserção ordenada por prioridade mantendo a estabilidade FIFO, remoção do primeiro nó para atendimento, cancelamento de registros por ID e o algoritmo do mecanismo Anti-Starvation.
 * *persistencia.h / persistencia.c: Módulo de armazenamento secundário. Responsável por gravar e restaurar o estado da fila e do histórico em arquivos de texto delimitados por ponto e vírgula (;*), consumindo e gerando ponteiros através das interfaces seguras dos TADs de Atendimento e Fila.
 * *interface.h / interface.c: Módulo de interação com o usuário. Exibe o menu principal, efetua a leitura de entradas de teclado com tratamento de buffer (getchar()*) para evitar corrupção de dados e emite relatórios estatísticos e percentuais dos atendimentos realizados.
-* *mainc*: Ponto de entrada do programa. Conecta todos os módulos , gerencia os geradores de sequenciais baseados na persistência e garante a desalocação completa de toda a memória dinâmica alocada antes de finalizar a aplicação.
+* *main.c*: Ponto de entrada do programa. Conecta todos os módulos , gerencia os geradores de sequenciais baseados na persistência e garante a desalocação completa de toda a memória dinâmica alocada antes de finalizar a aplicação.
 ---
 
 ## 4. TAD(s) e Estruturas de Dados
