@@ -28,11 +28,10 @@ O projeto foi desenvolvido em Linguagem C com execução em modo texto (terminal
 O projeto adota uma arquitetura avançada de *Tipo Abstrato de Dados (TAD)* Opaco Triplo para garantir o encapsulamento absoluto, onde o código cliente (main.c) não possui visibilidade física de nenhum membro das structs internas:
 
 1. *Atendimento (TAD Opaco): Representa a entidade do paciente. O código cliente apenas manipula ponteiros do tipo *Atendimento***. Toda leitura de dados (ID, nome, prioridade) é feita obrigatoriamente por funções de leitura segura (getters), impedindo alterações acidentais de estado.
-2.*No (TAD Opaco)* : Representa a célula de armazenamento da lista encadeada. Isola o encadeamento dos nós e protege o ponteiro para o dado **Atendimento***, garantindo que a estrutura física da lista seja manipulada apenas por funções homologadas.
-3. *FilaPrioridade (TAD Opaco - Lista Encadeada com Prioridade)*:
-  *Inserção Ordenada Estável*: Garante que pacientes de maior urgência fiquem à frente. Em caso de empate de prioridade, a inserção respeita rigorosamente a ordem de chegada (estabilidade FIFO).
+2. *No (TAD Opaco)* : Representa a célula de armazenamento da lista encadeada. Isola o encadeamento dos nós e protege o ponteiro para o dado **Atendimento***, garantindo que a estrutura física da lista seja manipulada apenas por funções homologadas.
+3.  *FilaPrioridade (TAD Opaco - Lista Encadeada com Prioridade)*:
+ * Inserção Ordenada Estável*: Garante que pacientes de maior urgência fiquem à frente. Em caso de empate de prioridade, a inserção respeita rigorosamente a ordem de chegada (estabilidade FIFO).
  * Gerenciamento Estrito de Memória: Toda alocação é dinâmica via *malloc*. As exclusões e a destruição final da fila percorrem os nós efetuando a desalocação em cascata com *free**, eliminando completamente os riscos de memory leaks (vazamento de memória).
-
 ---
 
 ## 5. Principais Regras do Problema e Gerenciamento
